@@ -1,5 +1,6 @@
 package com.soulware.user_service_back.global.aop;
 
+import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import java.lang.reflect.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -34,7 +35,7 @@ public class LoggingAspect {
             log.info(
                 "parameter type = {}, parameter value = {}",
                 arg.getClass().getSimpleName(),
-                arg
+                maskSensitiveData(arg)
             );
         }
 
@@ -49,6 +50,18 @@ public class LoggingAspect {
         }
 
         return returnObj;
+    }
+
+    private Object maskSensitiveData(Object arg) {
+        if (arg.getClass() == UserSignupRequestDto.class) {
+            UserSignupRequestDto userSignupRequestDto = (UserSignupRequestDto) arg;
+            return new UserSignupRequestDto(
+                userSignupRequestDto.getEmail(),
+                "******"
+            );
+        }
+
+        return arg;
     }
 
 }
