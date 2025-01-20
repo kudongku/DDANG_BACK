@@ -34,13 +34,15 @@ dependencies {
 //    SWAGGER
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3'
 //    JPA
-//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+//    MYSQL
+    runtimeOnly 'com.mysql:mysql-connector-j'
+//    SPRING SECURITY
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    REDIS
 //    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //    OAUTH2
 //    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-//    SPRING SECURITY
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
 //    VALIDATION
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 //    SPRING WEB
@@ -48,8 +50,6 @@ dependencies {
 //    LOMBOK
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
-//    MYSQL
-//    runtimeOnly 'com.mysql:mysql-connector-j'
 //    TEST
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
