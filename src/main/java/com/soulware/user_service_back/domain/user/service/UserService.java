@@ -5,6 +5,7 @@ import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
 import com.soulware.user_service_back.global.exception.ExistEmailException;
 import jakarta.transaction.Transactional;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ public class UserService {
 
     @Transactional
     public void signup(UserSignupRequestDto userSignupRequestDto) {
-        validateEmail(userSignupRequestDto.getEmail());
+        if (isExistEmail(userSignupRequestDto.getEmail())){
+            throw new ExistEmailException("이미 존재하는 이메일입니다. email : " + userSignupRequestDto.getEmail());
+        }
+
         String encodedPassword = passwordEncoder.encode(userSignupRequestDto.getPassword());
 
         User user = new User(
@@ -29,12 +33,9 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private void validateEmail(String email) {
+    public Boolean isExistEmail(String email) {
         User user = userRepository.getUserByEmail(email).orElse(null);
-
-        if (user != null) {
-            throw new ExistEmailException("존재하는 이메일입니다, email : " + email);
-        }
+        return Objects.nonNull(user);
     }
 
 }
