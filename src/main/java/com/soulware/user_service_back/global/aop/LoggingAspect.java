@@ -25,6 +25,11 @@ public class LoggingAspect {
     ) throws Throwable {
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();
         Method method = signature.getMethod();
+
+        if (method.getName().equals("openapiJson")) {
+            return proceedingJoinPoint.proceed();
+        }
+
         log.info("======= method name = {} =======", method.getName());
 
         Object[] args = proceedingJoinPoint.getArgs();
