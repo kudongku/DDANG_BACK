@@ -1,7 +1,7 @@
 package com.soulware.user_service_back.domain.user.controller;
 
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
-import com.soulware.user_service_back.domain.user.dto.request.UserValidateEmailResponseDto;
+import com.soulware.user_service_back.domain.user.dto.response.UserValidateEmailResponseDto;
 import com.soulware.user_service_back.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

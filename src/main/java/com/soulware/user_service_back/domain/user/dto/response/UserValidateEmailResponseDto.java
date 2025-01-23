@@ -1,4 +1,4 @@
-package com.soulware.user_service_back.domain.user.dto.request;
+package com.soulware.user_service_back.domain.user.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
