@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
 @ToString
+@Getter
 @AllArgsConstructor
 public class UserValidateEmailResponseDto {
     private boolean isExist;
