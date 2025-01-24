@@ -5,7 +5,7 @@ import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestD
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
-import com.soulware.user_service_back.global.exception.ExistEmailException;
+import com.soulware.user_service_back.global.exception.CustomIllegalArgumentException;
 import com.soulware.user_service_back.global.util.JwtUtil;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ public class UserService {
     @Transactional
     public void signup(UserSignupRequestDto userSignupRequestDto) {
         if (isExistEmail(userSignupRequestDto.getEmail())) {
-            throw new ExistEmailException(
+            throw new CustomIllegalArgumentException(
                 "이미 존재하는 이메일입니다. email : " + userSignupRequestDto.getEmail()
             );
         }
@@ -49,11 +49,11 @@ public class UserService {
         UserLoginRequestDto userLoginRequestDto
     ) {
         User user = userRepository.getUserByEmail(userLoginRequestDto.getEmail()).orElseThrow(
-            () -> new IllegalArgumentException("없는 유저입니다.")
+            () -> new CustomIllegalArgumentException("없는 유저입니다.")
         );
 
         if (!passwordEncoder.matches(userLoginRequestDto.getPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("틀린 비밀번호입니다.");
+            throw new CustomIllegalArgumentException("틀린 비밀번호입니다.");
         }
 
         String token = jwtUtil.createJwt(user.getId(), user.getEmail());
