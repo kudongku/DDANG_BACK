@@ -1,6 +1,8 @@
 package com.soulware.user_service_back.domain.user.controller;
 
+import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
+import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserValidateEmailResponseDto;
 import com.soulware.user_service_back.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,14 @@ public class AuthController {
         @RequestBody UserSignupRequestDto userSignupRequestDto
     ) {
         userService.signup(userSignupRequestDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<UserLoginResponseDto> login(
+        @RequestBody UserLoginRequestDto userLoginRequestDto
+    ) {
+        UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
+        return ResponseEntity.ok(userLoginResponseDto);
     }
 
 }

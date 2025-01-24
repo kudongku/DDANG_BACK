@@ -39,6 +39,10 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
 //    SPRING SECURITY
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    // jwt
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 //    REDIS
 //    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //    OAUTH2
