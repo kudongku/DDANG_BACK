@@ -30,7 +30,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .authorizeHttpRequests((request) -> {
                 request.requestMatchers(
-                    "/api/auth/*",
+                    "/api/auth/**",
                     "/v3/api-docs/**",       // OpenAPI 3 문서 관련 엔드포인트
                     "/swagger-ui/**",        // Swagger UI 관련 엔드포인트
                     "/swagger-ui.html",      // Swagger UI 메인 페이지

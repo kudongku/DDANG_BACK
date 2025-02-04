@@ -4,6 +4,7 @@ import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDt
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserValidateEmailResponseDto;
+import com.soulware.user_service_back.domain.user.service.Oauth2Service;
 import com.soulware.user_service_back.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final UserService userService;
+    private final Oauth2Service oauth2Service;
 
     @GetMapping("/validate")
     public ResponseEntity<UserValidateEmailResponseDto> validateEmail(
@@ -43,6 +45,14 @@ public class AuthController {
         @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
         UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
+        return ResponseEntity.ok(userLoginResponseDto);
+    }
+
+    @GetMapping("/authorization/kakao")
+    public ResponseEntity<UserLoginResponseDto> kakaoLogin(
+        @RequestParam("code") String code
+    ) {
+        UserLoginResponseDto userLoginResponseDto = oauth2Service.kakaoLogin(code);
         return ResponseEntity.ok(userLoginResponseDto);
     }
 

@@ -22,8 +22,12 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column
     private String password;
+
+    public User(String email) {
+        this.email = email;
+    }
 
     public User(String email, String password) {
         this.email = email;
