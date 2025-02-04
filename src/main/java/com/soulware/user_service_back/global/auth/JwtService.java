@@ -1,4 +1,4 @@
-package com.soulware.user_service_back.global.util;
+package com.soulware.user_service_back.global.auth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -12,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Slf4j(topic = "JwtUtil")
+@Slf4j(topic = "JwtService")
 @Component
-public class JwtUtil {
+public class JwtService {
 
     @Value("${jwt.secret.key}")
     private String secretKey;

@@ -5,8 +5,8 @@ import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestD
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
+import com.soulware.user_service_back.global.auth.JwtService;
 import com.soulware.user_service_back.global.exception.CustomIllegalArgumentException;
-import com.soulware.user_service_back.global.util.JwtUtil;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +20,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
 
     @Transactional
     public void signup(UserSignupRequestDto userSignupRequestDto) {
@@ -56,7 +56,7 @@ public class UserService {
             throw new CustomIllegalArgumentException("틀린 비밀번호입니다.");
         }
 
-        String token = jwtUtil.createJwt(user.getId(), user.getEmail());
+        String token = jwtService.createJwt(user.getId(), user.getEmail());
 
         return new UserLoginResponseDto(token);
     }

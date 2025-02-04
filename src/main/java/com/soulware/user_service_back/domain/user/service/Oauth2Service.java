@@ -5,7 +5,7 @@ import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponse
 import com.soulware.user_service_back.domain.user.dto.response.kakaoProfile.KakaoProfileResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
-import com.soulware.user_service_back.global.util.JwtUtil;
+import com.soulware.user_service_back.global.auth.JwtService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +32,7 @@ public class Oauth2Service {
     private String redirect;
 
     private final UserRepository userRepository;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final RestTemplate restTemplate;
 
     @Transactional
@@ -45,7 +45,7 @@ public class Oauth2Service {
             return userRepository.save(newUser);
         });
 
-        String token = jwtUtil.createJwt(user.getId(), user.getEmail());
+        String token = jwtService.createJwt(user.getId(), user.getEmail());
 
         return new UserLoginResponseDto(token);
     }

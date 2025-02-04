@@ -1,7 +1,7 @@
 package com.soulware.user_service_back.domain.user.dto.response;
 
 import com.soulware.user_service_back.global.annotaion.Sensitive;
-import com.soulware.user_service_back.global.util.JwtUtil;
+import com.soulware.user_service_back.global.auth.JwtService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 public class UserLoginResponseDto {
 
-    private final String tokenType = JwtUtil.tokenType;
+    private final String tokenType = JwtService.tokenType;
 
     @Sensitive
     private String token;

@@ -1,9 +1,9 @@
 package com.soulware.user_service_back.global.aop;
 
-import com.soulware.user_service_back.global.util.MaskingUtil;
+import static com.soulware.user_service_back.global.util.MaskingUtil.maskSensitiveData;
+
 import java.lang.reflect.Method;
 import java.util.Objects;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -14,12 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@RequiredArgsConstructor
 @Component
 @Aspect
 public class LoggingAspect {
-
-    private final MaskingUtil maskingUtil;
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     private void cut() {
@@ -48,7 +45,7 @@ public class LoggingAspect {
                 log.info(
                     "Parameter type = {}, Parameter value = {}",
                     arg.getClass().getSimpleName(),
-                    maskingUtil.maskSensitiveData(arg)
+                    maskSensitiveData(arg)
                 );
             }
         }
@@ -74,10 +71,10 @@ public class LoggingAspect {
         ) {
             Object responseEntityBody = responseEntity.getBody();
             returnTypeToString = responseEntityBody.getClass().getSimpleName();
-            returnValueToString = maskingUtil.maskSensitiveData(responseEntityBody).toString();
+            returnValueToString = maskSensitiveData(responseEntityBody).toString();
         } else {
             returnTypeToString = returnValue.getClass().getSimpleName();
-            returnValueToString = maskingUtil.maskSensitiveData(returnValue).toString();
+            returnValueToString = maskSensitiveData(returnValue).toString();
         }
 
         log.info(

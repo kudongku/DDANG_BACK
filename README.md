@@ -1,8 +1,12 @@
 # USER_SERVICE_BACK
 
-## oauth2
+## 엔드포인트
 
-### 카카오 로그인 엔드포인트
+### swagger
+```http://localhost:8080/swagger-ui/index.html```
+
+### 카카오 로그인
+
 ```
 https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=29a089c74cde92fa81e35560d1f6f555&redirect_uri=http://localhost:3000/api/auth/authorization/kakao
 ``` 
