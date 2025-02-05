@@ -38,7 +38,7 @@ public class LoggingAspect {
 
         Object[] args = proceedingJoinPoint.getArgs();
 
-        if (args == null || args.length == 0) {
+        if (args == null || args.length == 0 || (args.length == 1 && args[0] == null)) {
             log.info("No parameters passed to the method.");
         } else {
             for (Object arg : args) {
