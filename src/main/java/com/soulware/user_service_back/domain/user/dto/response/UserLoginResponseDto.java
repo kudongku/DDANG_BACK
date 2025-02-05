@@ -11,13 +11,20 @@ import lombok.ToString;
 @NoArgsConstructor
 public class UserLoginResponseDto {
 
-    private final String tokenType = JwtService.tokenType;
+    private final String tokenType = JwtService.TOKEN_TYPE;
 
     @Sensitive
     private String token;
 
-    public UserLoginResponseDto(String token) {
+    @Sensitive
+    private String refreshToken;
+
+    public UserLoginResponseDto(
+        String token,
+        String refreshToken
+    ) {
         this.token = token;
+        this.refreshToken = refreshToken;
     }
 
 }

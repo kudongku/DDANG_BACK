@@ -1,5 +1,8 @@
 package com.soulware.user_service_back.domain.user.service;
 
+import static com.soulware.user_service_back.global.auth.JwtService.ACCESS_TOKEN_EXPIRED_MS;
+import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKEN_EXPIRED_MS;
+
 import com.soulware.user_service_back.domain.user.dto.response.KakaoTokenResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.kakaoProfile.KakaoProfileResponseDto;
@@ -45,9 +48,18 @@ public class Oauth2Service {
             return userRepository.save(newUser);
         });
 
-        String token = jwtService.createJwt(user.getId(), user.getEmail());
+        String token = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            ACCESS_TOKEN_EXPIRED_MS
+        );
+        String refreshToken = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            REFRESH_TOKEN_EXPIRED_MS
+        );
 
-        return new UserLoginResponseDto(token);
+        return new UserLoginResponseDto(token, refreshToken);
     }
 
     private String requestToken(String accessCode) {

@@ -1,5 +1,6 @@
 package com.soulware.user_service_back.domain.user.controller;
 
+import com.soulware.user_service_back.domain.user.dto.request.TokenRefreshRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
@@ -53,6 +54,14 @@ public class AuthController {
         @RequestParam("code") String code
     ) {
         UserLoginResponseDto userLoginResponseDto = oauth2Service.kakaoLogin(code);
+        return ResponseEntity.ok(userLoginResponseDto);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<UserLoginResponseDto> refresh(
+        @RequestBody TokenRefreshRequestDto tokenRefreshRequestDto
+    ) {
+        UserLoginResponseDto userLoginResponseDto = userService.refresh(tokenRefreshRequestDto);
         return ResponseEntity.ok(userLoginResponseDto);
     }
 

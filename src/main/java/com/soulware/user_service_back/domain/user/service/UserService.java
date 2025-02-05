@@ -1,5 +1,9 @@
 package com.soulware.user_service_back.domain.user.service;
 
+import static com.soulware.user_service_back.global.auth.JwtService.ACCESS_TOKEN_EXPIRED_MS;
+import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKEN_EXPIRED_MS;
+
+import com.soulware.user_service_back.domain.user.dto.request.TokenRefreshRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
@@ -7,6 +11,7 @@ import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
 import com.soulware.user_service_back.global.auth.JwtService;
 import com.soulware.user_service_back.global.exception.CustomIllegalArgumentException;
+import io.jsonwebtoken.Claims;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -56,8 +61,46 @@ public class UserService {
             throw new CustomIllegalArgumentException("틀린 비밀번호입니다.");
         }
 
-        String token = jwtService.createJwt(user.getId(), user.getEmail());
+        String token = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            ACCESS_TOKEN_EXPIRED_MS
+        );
+        String refreshToken = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            REFRESH_TOKEN_EXPIRED_MS
+        );
 
-        return new UserLoginResponseDto(token);
+        return new UserLoginResponseDto(token, refreshToken);
     }
+
+    public UserLoginResponseDto refresh(TokenRefreshRequestDto tokenRefreshRequestDto) {
+        String refreshToken = tokenRefreshRequestDto.getRefreshToken();
+
+        if (jwtService.isExpired(refreshToken)) {
+            throw new CustomIllegalArgumentException("만료된 refresh token입니다.");
+        }
+
+        Claims claims = jwtService.getClaimsFromToken(refreshToken);
+        String email = claims.get("email", String.class);
+        long userId = claims.get("userId", Integer.class);
+
+        User user = userRepository.getUserByEmail(email).orElseThrow(
+            () -> new CustomIllegalArgumentException("유효하지 않은 토큰입니다.")
+        );
+
+        if (user.getId() != userId) {
+            throw new CustomIllegalArgumentException("유효하지 않은 토큰입니다.");
+        }
+
+        String token = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            ACCESS_TOKEN_EXPIRED_MS
+        );
+
+        return new UserLoginResponseDto(token, refreshToken);
+    }
+
 }
