@@ -1,7 +1,7 @@
 package com.soulware.user_service_back.global.auth;
 
 import com.soulware.user_service_back.global.config.SecurityConfig;
-import com.soulware.user_service_back.global.exception.CustomNotAuthenticatedException;
+import com.soulware.user_service_back.global.exception.CustomTokenExpiredException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -50,9 +50,9 @@ public class JwtFilter extends OncePerRequestFilter {
 
         try {
             token = jwtService.getValidTokenOrThrow(bearerToken);
-        } catch (CustomNotAuthenticatedException e) {
-            log.error(e.getMessage());
-            filterChain.doFilter(request, response);
+        } catch (CustomTokenExpiredException e) {
+            log.error("JWT Expired: {}", e.getMessage());
+            response.setStatus(401);
             return;
         }
 

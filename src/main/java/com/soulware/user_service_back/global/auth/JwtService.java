@@ -1,6 +1,6 @@
 package com.soulware.user_service_back.global.auth;
 
-import com.soulware.user_service_back.global.exception.CustomNotAuthenticatedException;
+import com.soulware.user_service_back.global.exception.CustomTokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -51,13 +51,13 @@ public class JwtService {
 
     public String getValidTokenOrThrow(String bearerToken) {
         if (!StringUtils.hasText(bearerToken) || !bearerToken.startsWith(TOKEN_TYPE)) {
-            throw new CustomNotAuthenticatedException("유효하지 않은 token type");
+            throw new CustomTokenExpiredException("유효하지 않은 token type");
         }
 
         String token = bearerToken.substring(TOKEN_TYPE.length());
 
         if (isExpired(token)) {
-            throw new CustomNotAuthenticatedException("만료된 token");
+            throw new CustomTokenExpiredException("만료된 token");
         }
 
         return token;
@@ -78,7 +78,7 @@ public class JwtService {
         } catch (ExpiredJwtException e) {
             return true;
         } catch (Exception e) {
-            throw new CustomNotAuthenticatedException("유효하지 않은 토큰입니다.");
+            throw new CustomTokenExpiredException("유효하지 않은 토큰입니다.");
         }
     }
 
