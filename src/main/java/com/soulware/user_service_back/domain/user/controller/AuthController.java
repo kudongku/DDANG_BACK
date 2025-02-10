@@ -3,7 +3,7 @@ package com.soulware.user_service_back.domain.user.controller;
 import com.soulware.user_service_back.domain.user.dto.request.TokenRefreshRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
-import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
+import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.UserValidateEmailResponseDto;
 import com.soulware.user_service_back.domain.user.service.Oauth2Service;
 import com.soulware.user_service_back.domain.user.service.UserService;
@@ -35,34 +35,35 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public void signup(
+    public ResponseEntity<TokenResponseDto> signup(
         @RequestBody UserSignupRequestDto userSignupRequestDto
     ) {
-        userService.signup(userSignupRequestDto);
+        TokenResponseDto tokenResponseDto = userService.signup(userSignupRequestDto);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserLoginResponseDto> login(
+    public ResponseEntity<TokenResponseDto> login(
         @RequestBody UserLoginRequestDto userLoginRequestDto
     ) {
-        UserLoginResponseDto userLoginResponseDto = userService.login(userLoginRequestDto);
-        return ResponseEntity.ok(userLoginResponseDto);
+        TokenResponseDto tokenResponseDto = userService.login(userLoginRequestDto);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     @GetMapping("/authorization/kakao")
-    public ResponseEntity<UserLoginResponseDto> kakaoLogin(
+    public ResponseEntity<TokenResponseDto> kakaoLogin(
         @RequestParam("code") String code
     ) {
-        UserLoginResponseDto userLoginResponseDto = oauth2Service.kakaoLogin(code);
-        return ResponseEntity.ok(userLoginResponseDto);
+        TokenResponseDto tokenResponseDto = oauth2Service.kakaoLogin(code);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<UserLoginResponseDto> refresh(
+    public ResponseEntity<TokenResponseDto> refresh(
         @RequestBody TokenRefreshRequestDto tokenRefreshRequestDto
     ) {
-        UserLoginResponseDto userLoginResponseDto = userService.refresh(tokenRefreshRequestDto);
-        return ResponseEntity.ok(userLoginResponseDto);
+        TokenResponseDto tokenResponseDto = userService.refresh(tokenRefreshRequestDto);
+        return ResponseEntity.ok(tokenResponseDto);
     }
 
 }

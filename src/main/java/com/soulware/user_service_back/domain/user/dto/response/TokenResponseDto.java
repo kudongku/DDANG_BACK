@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @NoArgsConstructor
-public class UserLoginResponseDto {
+public class TokenResponseDto {
 
     private final String tokenType = JwtService.TOKEN_TYPE;
 
@@ -19,7 +19,7 @@ public class UserLoginResponseDto {
     @Sensitive
     private String refreshToken;
 
-    public UserLoginResponseDto(
+    public TokenResponseDto(
         String token,
         String refreshToken
     ) {

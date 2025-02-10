@@ -4,7 +4,7 @@ import static com.soulware.user_service_back.global.auth.JwtService.ACCESS_TOKEN
 import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKEN_EXPIRED_MS;
 
 import com.soulware.user_service_back.domain.user.dto.response.KakaoTokenResponseDto;
-import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
+import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.kakaoProfile.KakaoProfileResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
@@ -39,7 +39,7 @@ public class Oauth2Service {
     private final RestTemplate restTemplate;
 
     @Transactional
-    public UserLoginResponseDto kakaoLogin(String code) {
+    public TokenResponseDto kakaoLogin(String code) {
         String oAuthToken = requestToken(code);
         String email = requestProfile(oAuthToken);
 
@@ -59,7 +59,7 @@ public class Oauth2Service {
             REFRESH_TOKEN_EXPIRED_MS
         );
 
-        return new UserLoginResponseDto(token, refreshToken);
+        return new TokenResponseDto(token, refreshToken);
     }
 
     private String requestToken(String accessCode) {

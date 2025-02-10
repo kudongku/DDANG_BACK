@@ -6,7 +6,7 @@ import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKE
 import com.soulware.user_service_back.domain.user.dto.request.TokenRefreshRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
-import com.soulware.user_service_back.domain.user.dto.response.UserLoginResponseDto;
+import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
 import com.soulware.user_service_back.global.auth.JwtService;
@@ -28,7 +28,7 @@ public class UserService {
     private final JwtService jwtService;
 
     @Transactional
-    public void signup(UserSignupRequestDto userSignupRequestDto) {
+    public TokenResponseDto signup(UserSignupRequestDto userSignupRequestDto) {
         if (isExistEmail(userSignupRequestDto.getEmail())) {
             throw new CustomIllegalArgumentException(
                 "이미 존재하는 이메일입니다. email : " + userSignupRequestDto.getEmail()
@@ -43,6 +43,19 @@ public class UserService {
         );
 
         userRepository.save(user);
+
+        String token = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            ACCESS_TOKEN_EXPIRED_MS
+        );
+        String refreshToken = jwtService.createJwt(
+            user.getId(),
+            user.getEmail(),
+            REFRESH_TOKEN_EXPIRED_MS
+        );
+
+        return new TokenResponseDto(token, refreshToken);
     }
 
     public Boolean isExistEmail(String email) {
@@ -50,7 +63,7 @@ public class UserService {
         return Objects.nonNull(user);
     }
 
-    public UserLoginResponseDto login(
+    public TokenResponseDto login(
         UserLoginRequestDto userLoginRequestDto
     ) {
         User user = userRepository.getUserByEmail(userLoginRequestDto.getEmail()).orElseThrow(
@@ -72,10 +85,10 @@ public class UserService {
             REFRESH_TOKEN_EXPIRED_MS
         );
 
-        return new UserLoginResponseDto(token, refreshToken);
+        return new TokenResponseDto(token, refreshToken);
     }
 
-    public UserLoginResponseDto refresh(TokenRefreshRequestDto tokenRefreshRequestDto) {
+    public TokenResponseDto refresh(TokenRefreshRequestDto tokenRefreshRequestDto) {
         String refreshToken = tokenRefreshRequestDto.getRefreshToken();
 
         if (jwtService.isExpired(refreshToken)) {
@@ -100,7 +113,7 @@ public class UserService {
             ACCESS_TOKEN_EXPIRED_MS
         );
 
-        return new UserLoginResponseDto(token, refreshToken);
+        return new TokenResponseDto(token, refreshToken);
     }
 
 }
