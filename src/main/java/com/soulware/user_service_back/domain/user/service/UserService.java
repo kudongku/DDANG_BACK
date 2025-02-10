@@ -3,7 +3,10 @@ package com.soulware.user_service_back.domain.user.service;
 import static com.soulware.user_service_back.global.auth.JwtService.ACCESS_TOKEN_EXPIRED_MS;
 import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKEN_EXPIRED_MS;
 
+import com.soulware.user_service_back.domain.town.entity.Town;
+import com.soulware.user_service_back.domain.town.service.TownService;
 import com.soulware.user_service_back.domain.user.dto.request.TokenRefreshRequestDto;
+import com.soulware.user_service_back.domain.user.dto.request.UserLocationRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
@@ -26,6 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final TownService townService;
 
     @Transactional
     public TokenResponseDto signup(UserSignupRequestDto userSignupRequestDto) {
@@ -114,6 +118,15 @@ public class UserService {
         );
 
         return new TokenResponseDto(token, refreshToken);
+    }
+
+    @Transactional
+    public void setLocation(UserLocationRequestDto userLocationRequestDto, String email) {
+        User user = userRepository.getUserByEmail(email).orElseThrow(
+            () -> new CustomIllegalArgumentException("없는 유저입니다.")
+        );
+        Town town = townService.getTownByUserLocationRequestDto(userLocationRequestDto);
+        user.setTown(town);
     }
 
 }
