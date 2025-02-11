@@ -1,6 +1,7 @@
 package com.soulware.user_service_back.domain.user.controller;
 
 import com.soulware.user_service_back.domain.user.dto.request.UserLocationRequestDto;
+import com.soulware.user_service_back.domain.user.dto.response.UserInfoResponseDto;
 import com.soulware.user_service_back.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,11 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/info")
-    public ResponseEntity<String> validateEmail(
+    public ResponseEntity<UserInfoResponseDto> getUserInfo(
         Authentication authentication
     ) {
-        String username = authentication.getName();
-        return ResponseEntity.ok(username);
+        UserInfoResponseDto userInfoResponseDto = userService.getUserInfo(authentication.getName());
+        return ResponseEntity.ok(userInfoResponseDto);
     }
 
     @PostMapping("/location")
