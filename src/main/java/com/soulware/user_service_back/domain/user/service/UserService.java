@@ -10,6 +10,7 @@ import com.soulware.user_service_back.domain.user.dto.request.UserLocationReques
 import com.soulware.user_service_back.domain.user.dto.request.UserLoginRequestDto;
 import com.soulware.user_service_back.domain.user.dto.request.UserSignupRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
+import com.soulware.user_service_back.domain.user.dto.response.UserInfoResponseDto;
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.repository.UserRepository;
 import com.soulware.user_service_back.global.auth.JwtService;
@@ -129,4 +130,11 @@ public class UserService {
         user.setTown(town);
     }
 
+    public UserInfoResponseDto getUserInfo(String email) {
+        User user = userRepository.getUserByEmail(email).orElseThrow(
+            () -> new CustomIllegalArgumentException("없는 유저입니다.")
+        );
+
+        return new UserInfoResponseDto(user);
+    }
 }

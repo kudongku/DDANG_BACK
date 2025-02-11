@@ -12,7 +12,7 @@ import lombok.ToString;
 public class UserLocationRequestDto {
 
     private String address;
-    private double x;
-    private double y;
+    private double latitude;
+    private double longitude;
 
 }

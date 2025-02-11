@@ -21,8 +21,8 @@ public class TownService {
         ).orElseGet(() -> {
             Town newTown = new Town(
                 userLocationRequestDto.getAddress(),
-                userLocationRequestDto.getX(),
-                userLocationRequestDto.getY()
+                userLocationRequestDto.getLatitude(),
+                userLocationRequestDto.getLongitude()
             );
             return townRepository.save(newTown);
         });
