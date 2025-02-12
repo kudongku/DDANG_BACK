@@ -42,9 +42,13 @@ public class UserService {
 
         String encodedPassword = passwordEncoder.encode(userSignupRequestDto.getPassword());
 
+        UserLocationRequestDto userLocationRequestDto = new UserLocationRequestDto();
+        Town town = townService.getTownByUserLocationRequestDto(userLocationRequestDto);
+
         User user = new User(
             userSignupRequestDto.getEmail(),
-            encodedPassword
+            encodedPassword,
+            town
         );
 
         userRepository.save(user);

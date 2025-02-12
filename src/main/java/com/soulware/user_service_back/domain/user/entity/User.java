@@ -32,13 +32,15 @@ public class User {
     @ManyToOne
     private Town town;
 
-    public User(String email) {
+    public User(String email, Town town) {
         this.email = email;
+        this.town = town;
     }
 
-    public User(String email, String password) {
+    public User(String email, String password, Town town) {
         this.email = email;
         this.password = password;
+        this.town = town;
     }
 
 }

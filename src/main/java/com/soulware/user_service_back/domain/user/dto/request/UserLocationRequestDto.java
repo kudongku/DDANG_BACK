@@ -11,8 +11,8 @@ import lombok.ToString;
 @NoArgsConstructor
 public class UserLocationRequestDto {
 
-    private String address;
-    private double latitude;
-    private double longitude;
+    private String address="서울특별시 중구 소공동";
+    private double latitude=126.97978948415194;
+    private double longitude=37.56389256147569;
 
 }
