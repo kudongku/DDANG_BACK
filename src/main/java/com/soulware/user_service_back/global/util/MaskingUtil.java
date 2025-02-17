@@ -4,12 +4,17 @@ import com.soulware.user_service_back.global.annotaion.Sensitive;
 import jakarta.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.UUID;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class MaskingUtil {
 
     public static Object maskSensitiveData(@NotNull Object arg) {
-        if (arg instanceof String || arg instanceof UsernamePasswordAuthenticationToken) {
+        if (
+            arg instanceof String
+                || arg instanceof UsernamePasswordAuthenticationToken
+                || arg instanceof UUID
+        ) {
             return arg;
         }
 

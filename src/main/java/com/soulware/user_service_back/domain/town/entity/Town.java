@@ -1,5 +1,6 @@
 package com.soulware.user_service_back.domain.town.entity;
 
+import com.soulware.user_service_back.domain.common.entity.TimeStamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "towns")
 @Entity
-public class Town {
+public class Town extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

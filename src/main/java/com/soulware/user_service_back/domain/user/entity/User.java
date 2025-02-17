@@ -1,5 +1,6 @@
 package com.soulware.user_service_back.domain.user.entity;
 
+import com.soulware.user_service_back.domain.common.entity.TimeStamp;
 import com.soulware.user_service_back.domain.town.entity.Town;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,14 +11,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-public class User {
+public class User extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +39,10 @@ public class User {
     public User(String email, String password, Town town) {
         this.email = email;
         this.password = password;
+        this.town = town;
+    }
+
+    public void updateTown(Town town) {
         this.town = town;
     }
 

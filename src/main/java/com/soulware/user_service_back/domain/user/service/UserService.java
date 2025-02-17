@@ -131,7 +131,7 @@ public class UserService {
             () -> new CustomIllegalArgumentException("없는 유저입니다.")
         );
         Town town = townService.getTownByUserLocationRequestDto(userLocationRequestDto);
-        user.setTown(town);
+        user.updateTown(town);
     }
 
     public UserInfoResponseDto getUserInfo(String email) {
@@ -140,5 +140,11 @@ public class UserService {
         );
 
         return new UserInfoResponseDto(user);
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.getUserByEmail(email).orElseThrow(
+            () -> new CustomIllegalArgumentException("없는 유저입니다.")
+        );
     }
 }
