@@ -9,9 +9,10 @@ import com.soulware.user_service_back.domain.auction.repository.AuctionRepositor
 import com.soulware.user_service_back.domain.user.entity.User;
 import com.soulware.user_service_back.domain.user.service.UserService;
 import com.soulware.user_service_back.global.exception.CustomIllegalArgumentException;
-import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,14 +32,9 @@ public class AuctionService {
         return new AuctionDetailResponseDto(auction);
     }
 
-    public AuctionsResponseDto getAuctions(String email) {
+    public AuctionsResponseDto getAuctions(Pageable pageable, String email) {
 //        todo. 근처에 있는 경매만 조회 구현
-        List<AuctionDetailResponseDto> auctions = auctionRepository.findAll()
-            .stream()
-            .map(
-                AuctionDetailResponseDto::new
-            ).toList();
-
+        Slice<Auction> auctions = auctionRepository.findAll(pageable);
         return new AuctionsResponseDto(auctions);
     }
 

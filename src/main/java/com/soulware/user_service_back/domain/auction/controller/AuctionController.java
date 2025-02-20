@@ -7,6 +7,10 @@ import com.soulware.user_service_back.domain.auction.dto.response.AuctionsRespon
 import com.soulware.user_service_back.domain.auction.service.AuctionService;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -35,9 +40,17 @@ public class AuctionController {
 
     @GetMapping
     public ResponseEntity<AuctionsResponseDto> getAuctions(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "10") int limit,
         Authentication authentication
     ) {
+        Pageable pageable = PageRequest.of(
+            page,
+            limit,
+            Sort.by(Direction.DESC, "createdAt")
+        );
         AuctionsResponseDto auctionsResponseDto = auctionService.getAuctions(
+            pageable,
             authentication.getName()
         );
         return ResponseEntity.ok(auctionsResponseDto);
