@@ -47,7 +47,7 @@ public class AuctionController {
         Pageable pageable = PageRequest.of(
             page,
             limit,
-            Sort.by(Direction.DESC, "createdAt")
+            Sort.by(Direction.DESC, "created_at")
         );
         AuctionsResponseDto auctionsResponseDto = auctionService.getAuctions(
             pageable,
