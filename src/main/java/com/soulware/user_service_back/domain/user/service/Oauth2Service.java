@@ -3,6 +3,9 @@ package com.soulware.user_service_back.domain.user.service;
 import static com.soulware.user_service_back.global.auth.JwtService.ACCESS_TOKEN_EXPIRED_MS;
 import static com.soulware.user_service_back.global.auth.JwtService.REFRESH_TOKEN_EXPIRED_MS;
 
+import com.soulware.user_service_back.domain.town.entity.Town;
+import com.soulware.user_service_back.domain.town.service.TownService;
+import com.soulware.user_service_back.domain.user.dto.request.UserLocationRequestDto;
 import com.soulware.user_service_back.domain.user.dto.response.KakaoTokenResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.TokenResponseDto;
 import com.soulware.user_service_back.domain.user.dto.response.kakaoProfile.KakaoProfileResponseDto;
@@ -36,6 +39,7 @@ public class Oauth2Service {
 
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final TownService townService;
     private final RestTemplate restTemplate;
 
     @Transactional
@@ -44,7 +48,10 @@ public class Oauth2Service {
         String email = requestProfile(oAuthToken);
 
         User user = userRepository.getUserByEmail(email).orElseGet(() -> {
-            User newUser = new User(email);
+            UserLocationRequestDto userLocationRequestDto = new UserLocationRequestDto();
+            Town town = townService.getTownByUserLocationRequestDto(userLocationRequestDto);
+
+            User newUser = new User(email, town);
             return userRepository.save(newUser);
         });
 

@@ -4,15 +4,12 @@ import com.soulware.user_service_back.global.annotaion.Sensitive;
 import jakarta.validation.constraints.NotNull;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
 public class MaskingUtil {
 
-    public static Object maskSensitiveData(@NotNull Object arg) {
-        if (arg instanceof String || arg instanceof UsernamePasswordAuthenticationToken) {
-            return arg;
-        }
+    private final static String MASKING_VALUE = "******";
 
+    public static Object maskSensitiveData(@NotNull Object arg) {
         Class<?> responseDtoClass = arg.getClass();
         Object maskedInstance;
 
@@ -24,7 +21,7 @@ public class MaskingUtil {
                 Object value = field.get(arg);
 
                 if (field.isAnnotationPresent(Sensitive.class)) {
-                    field.set(maskedInstance, "******");
+                    field.set(maskedInstance, MASKING_VALUE);
                 } else {
                     field.set(maskedInstance, value);
                 }
@@ -35,7 +32,7 @@ public class MaskingUtil {
             | InstantiationException
             | IllegalAccessException e
         ) {
-            throw new RuntimeException("Error masking sensitive data", e);
+            return MASKING_VALUE;
         }
 
         return maskedInstance;

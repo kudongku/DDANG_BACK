@@ -1,10 +1,13 @@
 package com.soulware.user_service_back.domain.user.entity;
 
+import com.soulware.user_service_back.domain.common.entity.TimeStamp;
+import com.soulware.user_service_back.domain.town.entity.Town;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "users")
 @Entity
-public class User {
+public class User extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,13 +28,22 @@ public class User {
     @Column
     private String password;
 
-    public User(String email) {
+    @ManyToOne
+    private Town town;
+
+    public User(String email, Town town) {
         this.email = email;
+        this.town = town;
     }
 
-    public User(String email, String password) {
+    public User(String email, String password, Town town) {
         this.email = email;
         this.password = password;
+        this.town = town;
+    }
+
+    public void updateTown(Town town) {
+        this.town = town;
     }
 
 }
